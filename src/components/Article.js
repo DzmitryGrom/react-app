@@ -1,14 +1,27 @@
-import React, {Component} from 'react'
+import React, {Component, PureComponent} from 'react'
 
-export class Article extends Component {
+export class Article extends PureComponent {
     state =  {
-        isOpen: false
+        isOpen: this.props.defaultOpen,
+        counter: 0
     }
 
-    handleClick = () => {
-        this.setState({
-            isOpen: !this.state.isOpen
+    // shouldComponentUpdate(nextProps, nextState) {       
+    //     return this.state.isOpen !== nextState.isOpen
+    // }
+
+    componentWillMount() {
+        console.log('___', 'componentWillMount');
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.defaultOpen != this.props.defaultOpen) this.setState({
+            isOpen: nextProps.defaultOpen
         }) 
+    }
+
+    componentWillUpdate() {
+        console.log('___', 'componentWillUpdate');
     }
 
     render(){
@@ -17,7 +30,8 @@ export class Article extends Component {
         return(
             <div className='card mx-auto' style={{ width: '50%' }}>
                 <div className='card-header'>
-                    <h2>{article.title}
+                    <h2 onClick={this.cont}>{article.title}
+                        clicked {this.state.counter}
                         <button onClick={this.handleClick} className='btn btn-primary btn-lg float-right'>{this.state.isOpen ? 'close' : 'open'}</button>
                     </h2>
                 </div>
@@ -28,6 +42,20 @@ export class Article extends Component {
             </div>
         )
     }
+
+    handleClick = () => {
+        this.setState({
+            isOpen: !this.state.isOpen
+        }) 
+    }
+
+    cont = () => {
+        this.setState({
+            counter: this.state.counter + 1
+        })
+    }
+
+    
 
 }
 
