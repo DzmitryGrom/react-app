@@ -2,7 +2,6 @@ import React, {Component, PureComponent} from 'react'
 
 export class Article extends PureComponent {
     state =  {
-        isOpen: this.props.defaultOpen,
         counter: 0
     }
 
@@ -14,25 +13,25 @@ export class Article extends PureComponent {
         console.log('___', 'componentWillMount');
     }
     
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.defaultOpen != this.props.defaultOpen) this.setState({
-            isOpen: nextProps.defaultOpen
-        }) 
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if(nextProps.defaultOpen != this.props.defaultOpen) this.setState({
+    //         isOpen: nextProps.defaultOpen
+    //     }) 
+    // }
 
     componentWillUpdate() {
         console.log('___', 'componentWillUpdate');
     }
 
     render(){
-        const {article} = this.props;
-        const body = this.state.isOpen && <section className='card-text'>{article.text}</section>
+        const {article, isOpen, onButtonClick} = this.props;
+        const body = isOpen && <section className='card-text'>{article.text}</section>
         return(
             <div className='card mx-auto' style={{ width: '50%' }}>
                 <div className='card-header'>
                     <h2 onClick={this.cont}>{article.title}
                         clicked {this.state.counter}
-                        <button onClick={this.handleClick} className='btn btn-primary btn-lg float-right'>{this.state.isOpen ? 'close' : 'open'}</button>
+                        <button onClick={onButtonClick} className='btn btn-primary btn-lg float-right'>{isOpen ? 'close' : 'open'}</button>
                     </h2>
                 </div>
                 <div className='card-body'>
@@ -41,12 +40,6 @@ export class Article extends PureComponent {
                 </div>
             </div>
         )
-    }
-
-    handleClick = () => {
-        this.setState({
-            isOpen: !this.state.isOpen
-        }) 
     }
 
     cont = () => {
